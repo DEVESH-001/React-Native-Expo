@@ -1,36 +1,39 @@
-//https://reactnavigation.org/
-//docs/stack-navigator
+// Static Tab Navigator
+//https://reactnavigation.org/docs/bottom-tab-navigator?config=static
 import * as React from "react";
 import { View, Text } from "react-native";
+
 import { createStaticNavigation } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "./src/screens/HomeScreen";
-import DetailScreen from "./src/screens/DetailScreen";
-import ProfileScreen from "./src/screens/ProfileScreen";
-import DynamicStackNavigator from "./src/navigator/stack/DynamicStackNavigator";
-import StaticStackNavigator from "./src/navigator/stack/StaticStackNavigator";
+
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import DynamicTabNavigator from "./src/navigator/tabs/DynamicTabNavigator";
+import DynamicTabNav2 from "./src/navigator/tabs/DynamicTabNav2";
 
 // function HomeScreen() {
 //   return (
-//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-//       <Text>Home Screen</Text>
+//     <View>
+//       <Text>Home</Text>
 //     </View>
 //   );
 // }
 
-// const RootStack = createNativeStackNavigator({
-//   screens: {
-//     Home: HomeScreen,
-//   },
-// });
-
-// const Navigation = createStaticNavigation(RootStack);
-
-// export default function App() {
-//   return <Navigation />;
+// function ProfileScreen() {
+//   return (
+//     <View>
+//       <Text>Profile</Text>
+//     </View>
+//   );
 // }
 
+// const MyTabs = createBottomTabNavigator({
+//   screens: {
+//     Home: HomeScreen,
+//     Profile: ProfileScreen,
+
+//   },
+// });
+// const Navigation = createStaticNavigation(MyTabs);
 export default function App() {
-  //return <DynamicStackNavigator />;
-   return <StaticStackNavigator />;
+  // return <DynamicTabNavigator />;
+  return <DynamicTabNav2 />;
 }
