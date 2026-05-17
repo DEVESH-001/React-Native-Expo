@@ -5,7 +5,14 @@ import { Text, View, StyleSheet } from "react-native";
 export default function Index() {
   return (
     <View style={styles.container}>
-      <Home />
+      {/* <Home />
+      <Link href="/about">About Page</Link> */}
+
+      {/* Auth Routes */}
+      {/* <Link href="/(auth)/login">Login</Link> */}
+
+      {/* Main Routes */}
+      <Link href={"/(auth)/login"}>Login-New</Link>
     </View>
   );
 }
