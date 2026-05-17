@@ -15,7 +15,10 @@ export default function Index() {
       {/* <Link href={"/(auth)/login"}>Login-New</Link> */}
 
       {/* Native-Tabs */}
-      <Link href="/(tabs)/">Tabs</Link>
+      {/* <Link href="/(tabs)/">Tabs</Link> */}
+
+      {/* Drawer */}
+      <Link href="/(drawer)/">Drawer</Link>
     </View>
   );
 }
