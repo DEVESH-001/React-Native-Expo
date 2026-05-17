@@ -12,7 +12,10 @@ export default function Index() {
       {/* <Link href="/(auth)/login">Login</Link> */}
 
       {/* Main Routes */}
-      <Link href={"/(auth)/login"}>Login-New</Link>
+      {/* <Link href={"/(auth)/login"}>Login-New</Link> */}
+
+      {/* Native-Tabs */}
+      <Link href="/(tabs)/">Tabs</Link>
     </View>
   );
 }
