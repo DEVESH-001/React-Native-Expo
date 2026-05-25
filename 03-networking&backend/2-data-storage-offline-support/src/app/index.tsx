@@ -1,79 +1,181 @@
-//https://react-native-async-storage.github.io/2.0/API/#multiset
-import { Text, View, StyleSheet, Button } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// //https://react-native-async-storage.github.io/2.0/API/#multiset
+// import { Text, View, StyleSheet, Button } from "react-native";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+// import { useState } from "react";
+// import { SafeAreaView } from "react-native-safe-area-context";
+
+// export default function Index() {
+//   const [data, setData] = useState("");
+
+//   const myObj = {
+//     name: "devesh",
+//     age: 25,
+//     role: "developer",
+//   };
+
+//   // setItem
+//   const saveData = async () => {
+//     //await AsyncStorage.setItem("user", "Devesh");
+//     await AsyncStorage.setItem("user", JSON.stringify(myObj));
+//   };
+
+//   // getItem
+//   const getData = async () => {
+//     const value = await AsyncStorage.getItem("user");
+//     setData(value!);
+//     console.log(value);
+//   };
+
+//   // removeItem
+//   const removeData = async () => {
+//     await AsyncStorage.removeItem("user");
+//   };
+
+//   // clearItem
+//   const clearData = async () => {
+//     await AsyncStorage.clear();
+//   };
+
+//   // getAllKeys
+//   const getAllKeys = async () => {
+//     const keys = await AsyncStorage.getAllKeys();
+//     console.log(keys);
+//   };
+
+//   // saveMultipleItems :multiSet-> (Fetches multiple key-value pairs for given array)
+//   const saveMultiple = async () => {
+//     await AsyncStorage.multiSet([
+//       ["user", "Devesh"],
+//       ["age", "25"],
+//       ["role", "founder@fusionlabs"],
+//     ]);
+//   };
+
+//   // multiGet ->Stores multiple key-value pairs in a batch.
+//   const getMultiple = async () => {
+//     const values = await AsyncStorage.multiGet(["user", "age"]);
+//     console.log(values);
+//   };
+
+//   return (
+//     <SafeAreaView style={styles.container}>
+//       <Button title="Save Data" onPress={saveData} />
+//       <Button title="Get Data" onPress={getData} />
+//       <Button title="Remove Data" onPress={removeData} />
+//       <Button title="Clear Storage" onPress={clearData} />
+//       <Button title="Get All Keys" onPress={getAllKeys} />
+//       <Button title="Save Multiple" onPress={saveMultiple} />
+//       <Button title="Get Multiple" onPress={getMultiple} />
+
+//       <View style={{ marginTop: 20 }}>
+//         <Text style={styles.output}>Output : </Text>
+//         <Text>{data}</Text>
+//       </View>
+//     </SafeAreaView>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     alignItems: "center",
+//     justifyContent: "center",
+//     padding: 20,
+//     gap: 12,
+//   },
+//   output: {
+//     fontSize: 18,
+//     fontWeight: "bold",
+//   },
+// });
+
+// SecureStore in Expo [https://docs.expo.dev/versions/latest/sdk/securestore/]
+
+import { Button, ScrollView, StyleSheet, Text, View } from "react-native";
+import * as SecureStore from "expo-secure-store";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function Index() {
-  const [data, setData] = useState("");
+const Index = () => {
+  const [output, setOutput] = useState<string>("");
 
-  const myObj = {
-    name: "devesh",
-    age: 25,
-    role: "developer",
+  const saveToken = async () => {
+    await SecureStore.setItemAsync("token", "abc123xyz"); // this stores the token securely
+    setOutput("Token saved successfully");
   };
 
-  // setItem
-  const saveData = async () => {
-    //await AsyncStorage.setItem("user", "Devesh");
-    await AsyncStorage.setItem("user", JSON.stringify(myObj));
+  const getToken = async () => {
+    const value = await SecureStore.getItemAsync("token");
+    setOutput(value || "No token found");
   };
 
-  // getItem
-  const getData = async () => {
-    const value = await AsyncStorage.getItem("user");
-    setData(value!);
-    console.log(value);
+  const deleteToken = async () => {
+    await SecureStore.deleteItemAsync("token");
+    setOutput("Token deleted successfully");
   };
 
-  // removeItem
-  const removeData = async () => {
-    await AsyncStorage.removeItem("user");
+  const checkAvailability = async () => {
+    const available = await SecureStore.isAvailableAsync();
+
+    setOutput(
+      available ? "SecureStore Available" : "SecureStore Not Available",
+    );
   };
 
-  // clearItem
-  const clearData = async () => {
-    await AsyncStorage.clear();
+  const saveObject = async () => {
+    const user = {
+      name: "Devesh yadav",
+      role: "founder",
+    };
+    await SecureStore.setItemAsync("user", JSON.stringify(user));
+    setOutput("Object saved successfully");
   };
 
-  // getAllKeys
-  const getAllKeys = async () => {
-    const keys = await AsyncStorage.getAllKeys();
-    console.log(keys);
-  };
+  const getObject = async () => {
+    const data = await SecureStore.getItemAsync("user");
 
-  // saveMultipleItems :multiSet-> (Fetches multiple key-value pairs for given array)
-  const saveMultiple = async () => {
-    await AsyncStorage.multiSet([
-      ["user", "Devesh"],
-      ["age", "25"],
-      ["role", "founder@fusionlabs"],
-    ]);
-  };
+    if (!data) {
+      setOutput("No User Found");
+      return;
+    }
 
-  // multiGet ->Stores multiple key-value pairs in a batch.
-  const getMultiple = async () => {
-    const values = await AsyncStorage.multiGet(["user", "age"]);
-    console.log(values);
+    const parsed = JSON.parse(data);
+
+    setOutput(`${parsed.name} - ${parsed.role}`);
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Button title="Save Data" onPress={saveData} />
-      <Button title="Get Data" onPress={getData} />
-      <Button title="Remove Data" onPress={removeData} />
-      <Button title="Clear Storage" onPress={clearData} />
-      <Button title="Get All Keys" onPress={getAllKeys} />
-      <Button title="Save Multiple" onPress={saveMultiple} />
-      <Button title="Get Multiple" onPress={getMultiple} />
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView
+        contentContainerStyle={{
+          padding: 20,
+          gap: 12,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 28,
+            fontWeight: "bold",
+            marginBottom: 10,
+          }}
+        >
+          Expo FileSystem Modern API
+        </Text>
 
-      <View style={{ marginTop: 20 }}>
-        <Text style={styles.output}>Output : </Text>
-        <Text>{data}</Text>
-      </View>
+        <Button title="Save Token" onPress={saveToken} />
+        <Button title="Get Token" onPress={getToken} />
+        <Button title="Delete Token" onPress={deleteToken} />
+        <Button title="Check Availability" onPress={checkAvailability} />
+        <Button title="Get Object" onPress={getObject} />
+        <Button title="Save Object" onPress={saveObject} />
+
+        <Text style={styles.output}>OUTPUT: {output}</Text>
+      </ScrollView>
     </SafeAreaView>
   );
-}
+};
+
+export default Index;
 
 const styles = StyleSheet.create({
   container: {
