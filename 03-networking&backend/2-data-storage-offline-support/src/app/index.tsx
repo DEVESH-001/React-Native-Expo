@@ -91,61 +91,176 @@
 
 // SecureStore in Expo [https://docs.expo.dev/versions/latest/sdk/securestore/]
 
+// import { Button, ScrollView, StyleSheet, Text, View } from "react-native";
+// import * as SecureStore from "expo-secure-store";
+// import { useState } from "react";
+// import { SafeAreaView } from "react-native-safe-area-context";
+
+// const Index = () => {
+//   const [output, setOutput] = useState<string>("");
+
+//   const saveToken = async () => {
+//     await SecureStore.setItemAsync("token", "abc123xyz"); // this stores the token securely
+//     setOutput("Token saved successfully");
+//   };
+
+//   const getToken = async () => {
+//     const value = await SecureStore.getItemAsync("token");
+//     setOutput(value || "No token found");
+//   };
+
+//   const deleteToken = async () => {
+//     await SecureStore.deleteItemAsync("token");
+//     setOutput("Token deleted successfully");
+//   };
+
+//   const checkAvailability = async () => {
+//     const available = await SecureStore.isAvailableAsync();
+
+//     setOutput(
+//       available ? "SecureStore Available" : "SecureStore Not Available",
+//     );
+//   };
+
+//   const saveObject = async () => {
+//     const user = {
+//       name: "Devesh yadav",
+//       role: "founder",
+//     };
+//     await SecureStore.setItemAsync("user", JSON.stringify(user));
+//     setOutput("Object saved successfully");
+//   };
+
+//   const getObject = async () => {
+//     const data = await SecureStore.getItemAsync("user");
+
+//     if (!data) {
+//       setOutput("No User Found");
+//       return;
+//     }
+
+//     const parsed = JSON.parse(data);
+
+//     setOutput(`${parsed.name} - ${parsed.role}`);
+//   };
+
+//   return (
+//     <SafeAreaView style={{ flex: 1 }}>
+//       <ScrollView
+//         contentContainerStyle={{
+//           padding: 20,
+//           gap: 12,
+//         }}
+//       >
+//         <Text
+//           style={{
+//             fontSize: 28,
+//             fontWeight: "bold",
+//             marginBottom: 10,
+//           }}
+//         >
+//           Expo FileSystem Modern API
+//         </Text>
+
+//         <Button title="Save Token" onPress={saveToken} />
+//         <Button title="Get Token" onPress={getToken} />
+//         <Button title="Delete Token" onPress={deleteToken} />
+//         <Button title="Check Availability" onPress={checkAvailability} />
+//         <Button title="Get Object" onPress={getObject} />
+//         <Button title="Save Object" onPress={saveObject} />
+
+//         <Text style={styles.output}>OUTPUT: {output}</Text>
+//       </ScrollView>
+//     </SafeAreaView>
+//   );
+// };
+
+// export default Index;
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     alignItems: "center",
+//     justifyContent: "center",
+//     padding: 20,
+//     gap: 12,
+//   },
+//   output: {
+//     fontSize: 18,
+//     fontWeight: "bold",
+//   },
+// });
+
+// SQlite [https://docs.expo.dev/versions/latest/sdk/sqlite/]
+import * as SQLite from "expo-sqlite";
+import React, { useEffect, useState } from "react";
 import { Button, ScrollView, StyleSheet, Text, View } from "react-native";
-import * as SecureStore from "expo-secure-store";
-import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const Index = () => {
-  const [output, setOutput] = useState<string>("");
+const db = SQLite.openDatabaseSync("demo.db"); 
 
-  const saveToken = async () => {
-    await SecureStore.setItemAsync("token", "abc123xyz"); // this stores the token securely
-    setOutput("Token saved successfully");
+const index = () => {
+  const [output, setOutput] = useState("");
+
+  const createTable = () => {
+    db.execSync(`
+        CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        age INTEGER
+      );
+      
+      `);
+
+    setOutput("Table created");
   };
 
-  const getToken = async () => {
-    const value = await SecureStore.getItemAsync("token");
-    setOutput(value || "No token found");
+  const insertUser = () => {
+    db.runSync("INSERT INTO users (name , age) VALUES (? , ?)", "Suraj", 22);
   };
 
-  const deleteToken = async () => {
-    await SecureStore.deleteItemAsync("token");
-    setOutput("Token deleted successfully");
+  const getUsers = () => {
+    const users = db.getAllSync("SELECT * FROM users");
+
+    setOutput(JSON.stringify(users, null, 2));
   };
 
-  const checkAvailability = async () => {
-    const available = await SecureStore.isAvailableAsync();
+  const getFirstUser = () => {
+    const user = db.getFirstSync("SELECT * FROM users");
 
-    setOutput(
-      available ? "SecureStore Available" : "SecureStore Not Available",
-    );
+    setOutput(JSON.stringify(user, null, 2));
   };
 
-  const saveObject = async () => {
-    const user = {
-      name: "Devesh yadav",
-      role: "founder",
-    };
-    await SecureStore.setItemAsync("user", JSON.stringify(user));
-    setOutput("Object saved successfully");
+  const updateUser = () => {
+    db.runSync("UPDATE users SET age = ? WHERE id = ?", 25, 1);
+
+    setOutput("User Updated");
   };
 
-  const getObject = async () => {
-    const data = await SecureStore.getItemAsync("user");
+  const deleteUser = () => {
+    db.runSync("DELETE FROM users WHERE id = ?", 1);
 
-    if (!data) {
-      setOutput("No User Found");
-      return;
-    }
-
-    const parsed = JSON.parse(data);
-
-    setOutput(`${parsed.name} - ${parsed.role}`);
+    setOutput("User Deleted");
   };
+
+  const dropTable = () => {
+    db.execSync(`
+      DROP TABLE IF EXISTS users;
+    `);
+
+    setOutput("Table Dropped");
+  };
+
+  useEffect(() => {
+    createTable();
+  }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+      }}
+    >
       <ScrollView
         contentContainerStyle={{
           padding: 20,
@@ -159,34 +274,55 @@ const Index = () => {
             marginBottom: 10,
           }}
         >
-          Expo FileSystem Modern API
+          SQLite Demo
         </Text>
 
-        <Button title="Save Token" onPress={saveToken} />
-        <Button title="Get Token" onPress={getToken} />
-        <Button title="Delete Token" onPress={deleteToken} />
-        <Button title="Check Availability" onPress={checkAvailability} />
-        <Button title="Get Object" onPress={getObject} />
-        <Button title="Save Object" onPress={saveObject} />
+        <Button title="Create Table" onPress={createTable} />
 
-        <Text style={styles.output}>OUTPUT: {output}</Text>
+        <Button title="Insert User" onPress={insertUser} />
+
+        <Button title="Get All Users" onPress={getUsers} />
+
+        <Button title="Get First User" onPress={getFirstUser} />
+
+        <Button title="Update User" onPress={updateUser} />
+
+        <Button title="Delete User" onPress={deleteUser} />
+
+        <Button title="Drop Table" onPress={dropTable} />
+
+        <View
+          style={{
+            marginTop: 20,
+            padding: 16,
+            borderWidth: 1,
+            borderRadius: 10,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "bold",
+              marginBottom: 10,
+            }}
+          >
+            Output
+          </Text>
+
+          <Text
+            selectable
+            style={{
+              fontSize: 14,
+            }}
+          >
+            {output}
+          </Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default Index;
+export default index;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-    gap: 12,
-  },
-  output: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-});
+const styles = StyleSheet.create({});
