@@ -1,4 +1,5 @@
 import { GyroscopeCard } from "@/components/gyroscope-card";
+import { LightMeter } from "@/components/lightmeter";
 import { TiltGame } from "@/components/tilt-game";
 import { useAccelerometer } from "@/hooks/use-accelerometer";
 import { Text, View, StyleSheet, StatusBar } from "react-native";
@@ -14,7 +15,10 @@ export default function Index() {
       {/* <TiltGame /> */}
 
       {/* gyroscope */}
-      <GyroscopeCard/>
+      {/* <GyroscopeCard/> */}
+
+      {/* Light sensor only for android !ios */}
+       <LightMeter />
     </View>
   );
 }
