@@ -1,4 +1,4 @@
-
+import { GyroscopeCard } from "@/components/gyroscope-card";
 import { TiltGame } from "@/components/tilt-game";
 import { useAccelerometer } from "@/hooks/use-accelerometer";
 import { Text, View, StyleSheet, StatusBar } from "react-native";
@@ -9,8 +9,12 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      <StatusBar />
-      <TiltGame />
+      <StatusBar barStyle={"light-content"} />
+      {/* useAccelerometer */}
+      {/* <TiltGame /> */}
+
+      {/* gyroscope */}
+      <GyroscopeCard/>
     </View>
   );
 }
