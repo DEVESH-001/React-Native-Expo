@@ -6,6 +6,7 @@ import { Text, View, StyleSheet, StatusBar } from "react-native";
 import { useEffect } from "react";
 
 import { ShakeDetector } from "@/components/device-motionShakeDetector";
+import { StepCounter } from "@/components/step-counter";
 
 export default function Index() {
   return (
@@ -22,7 +23,10 @@ export default function Index() {
 
       {/* Acc + gyro + magnetometer = DeviceMotion */}
       {/* device moiton */}
-      <ShakeDetector />
+      {/* <ShakeDetector /> */}
+
+      {/* Pedometer */}
+      <StepCounter />
     </View>
   );
 }
