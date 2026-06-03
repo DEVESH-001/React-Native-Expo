@@ -2,15 +2,12 @@ import { GyroscopeCard } from "@/components/gyroscope-card";
 import { LightMeter } from "@/components/lightmeter";
 import { TiltGame } from "@/components/tilt-game";
 import { useAccelerometer } from "@/hooks/use-accelerometer";
-import { DeviceMotion } from "expo-sensors";
 import { Text, View, StyleSheet, StatusBar } from "react-native";
 import { useEffect } from "react";
 
-export default function Index() {
-  // const { available, x, y, z } = useAccelerometer();
-  // console.log(available,x,y,z);
-  useEffect(()=>{},[])
+import { ShakeDetector } from "@/components/device-motionShakeDetector";
 
+export default function Index() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle={"light-content"} />
@@ -25,8 +22,7 @@ export default function Index() {
 
       {/* Acc + gyro + magnetometer = DeviceMotion */}
       {/* device moiton */}
-
-
+      <ShakeDetector />
     </View>
   );
 }
