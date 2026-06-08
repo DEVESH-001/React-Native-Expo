@@ -1,0 +1,7 @@
+name: CI Check
+
+on:
+  push: branches:["main"]
+
+jobs:
+  typecheck:
